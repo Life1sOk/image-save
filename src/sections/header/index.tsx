@@ -1,18 +1,14 @@
 "use client";
 
-import uploadIcon from "../../../public/upload.svg";
+import { useAppSelector } from "@ui/app/store/hooks";
 
-import Button from "@ui/components/button";
 import Logo from "@ui/components/logo";
+import UploadButton from "./upload";
 
 import { HeaderStyle, LogoWrapper, CountAllStyle } from "./index.style";
 
-interface IHeader {
-  totalCount: number;
-}
-
-const Header = ({ totalCount }: IHeader) => {
-  // Count should take a count of all images after fetch;
+const Header = () => {
+  const totalCount = useAppSelector((state) => state.images.data.totalCount);
 
   return (
     <HeaderStyle>
@@ -20,7 +16,7 @@ const Header = ({ totalCount }: IHeader) => {
         <Logo />
         <CountAllStyle>{totalCount} images stored in keeper</CountAllStyle>
       </LogoWrapper>
-      <Button src={uploadIcon} title="Upload image" />
+      <UploadButton />
     </HeaderStyle>
   );
 };

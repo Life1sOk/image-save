@@ -19,7 +19,7 @@ export const InfoWrapper = styled.div`
   position: absolute;
   top: -10px;
   right: 10px;
-  z-index: 2;
+  z-index: 4;
 
   max-width: 70%;
 

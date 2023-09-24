@@ -28,7 +28,8 @@
     "**/*.tsx",
     ".next/types/**/*.ts",
     "src/components/logo/index.style.js",
-    "src/app/page.style.js"
+    "src/app/page.style.js",
+    "src/modals/blur-modal/index.style.js"
   ],
   "exclude": ["node_modules"]
 }

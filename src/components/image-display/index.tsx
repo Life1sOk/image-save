@@ -1,37 +1,10 @@
-import Image from "next/image";
-import type { IImage } from "@ui/app/page";
+import ImageDisplay from "./image-display";
+import ImageUpload from "./image-upload";
 
-import { ImageDisplayStyle, ImageWrapper, InfoWrapper } from "./index.style";
+import { IImage } from "@ui/app/type";
 
-interface IImgData {
-  data: IImage;
-  isLabel?: boolean;
-}
-
-const ImageDisplay = ({ data, isLabel = true }: IImgData) => {
-  const { src, title, date } = data;
-
-  // isTitle exist
-  const wichInfo = title == null ? date : title;
-
-  // Image url
-  const imageUrl = `http://localhost:4000/${src}`;
-
-  return (
-    <ImageDisplayStyle>
-      <ImageWrapper>
-        <Image
-          width={0}
-          height={0}
-          style={{ width: "100%", height: "200px" }}
-          sizes="100vw"
-          alt="Some image"
-          src={imageUrl}
-        />
-      </ImageWrapper>
-      {isLabel && <InfoWrapper>{wichInfo}</InfoWrapper>}
-    </ImageDisplayStyle>
-  );
+const ImageController = ({ data }: { data: IImage | Blob }) => {
+  return <>{"id" in data ? <ImageDisplay data={data} /> : <ImageUpload blob={data} />}</>;
 };
 
-export default ImageDisplay;
+export default ImageController;
