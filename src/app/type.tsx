@@ -20,3 +20,19 @@ export interface IEditOpen {
   data: IImage;
   date: string;
 }
+
+export interface ISelectedFile {
+  id: string;
+  file: File;
+  status: boolean;
+}
+
+export interface IReplaceFile {
+  id: string;
+  date: string;
+}
+
+export interface IResponseAdd {
+  date: string;
+  current: IImage;
+}

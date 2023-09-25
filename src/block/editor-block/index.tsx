@@ -8,7 +8,7 @@ import { changeLabel } from "@ui/app/store/images.slice";
 import acceptSVG from "../../../public/accept.svg";
 
 import Button from "@ui/components/button";
-import ImageDisplay from "@ui/components/image-display/image-display";
+import ImageDisplay from "@ui/components/image/image-display";
 import LabelEditor from "@ui/components/label-editor";
 
 import { EditorStyle, ImageDisplayBlock, Title } from "./index.style";

@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { useOutsideClick } from "../../../lib/useOutsideClick";
 
-import { ModalWrapper, ModalStyle, FeatureWrapper } from "./index.style";
+import { ModalWrapper, ModalFeatureStyle, FeatureWrapper } from "./index-style";
 
 interface IFeatureModal {
   features: React.ReactNode | React.ReactNode[];
@@ -22,9 +22,9 @@ const FeatureModal = ({ features }: IFeatureModal) => {
   return (
     <ModalWrapper ref={modalRef} onClick={handleOpen}>
       {isOpen && (
-        <ModalStyle>
+        <ModalFeatureStyle>
           <FeatureWrapper>{features}</FeatureWrapper>
-        </ModalStyle>
+        </ModalFeatureStyle>
       )}
     </ModalWrapper>
   );

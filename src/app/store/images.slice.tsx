@@ -1,7 +1,17 @@
 "use client";
 
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { IImage, IGetData, IDeleteImg, IEditOpen } from "@ui/app/type";
+
+import { formateDate } from "../../../lib/formateDate";
+
+import type {
+  IImage,
+  IGetData,
+  IDeleteImg,
+  IEditOpen,
+  IReplaceFile,
+  ISelectedFile,
+} from "@ui/app/type";
 
 interface IImagesState {
   isFetched: boolean;
@@ -12,7 +22,7 @@ interface IImagesState {
     current: IImage | null;
   };
   uploader: {
-    selectedFiles: Blob[];
+    selectedFiles: { [key: string]: ISelectedFile[] };
   };
 }
 
@@ -29,7 +39,7 @@ const initialState: IImagesState = {
     current: null,
   },
   uploader: {
-    selectedFiles: [],
+    selectedFiles: {},
   },
 };
 
@@ -55,7 +65,15 @@ export const imagesSlice = createSlice({
     },
     deleteImage: (state, { payload }: PayloadAction<IDeleteImg>) => {
       const { id, date } = payload;
-      state.data.data[date] = state.data.data[date].filter((img) => img.id !== id);
+
+      const mainData = state.data.data[date];
+      const selectedData = state.uploader.selectedFiles[date];
+
+      if (mainData) state.data.data[date] = mainData.filter((img) => img.id !== id);
+
+      if (mainData.length < 1 && selectedData.length < 1) {
+        state.data.dates = state.data.dates.filter((d) => d !== date);
+      }
     },
     // Editor
     editImage: (state, { payload }: PayloadAction<IEditOpen>) => {
@@ -71,8 +89,45 @@ export const imagesSlice = createSlice({
       state.editor.current = null;
     },
     // Uploader
-    selectFile: (state, { payload }: PayloadAction<{ file: Blob }>) => {
-      state.uploader.selectedFiles.unshift(payload.file);
+    selectFile: (state, { payload }: PayloadAction<ISelectedFile>) => {
+      const { monthYear } = formateDate();
+
+      const findMonth = state.data.dates.find((d) => d === monthYear);
+
+      if (!!!findMonth) {
+        state.data.dates.unshift(monthYear);
+
+        state.uploader.selectedFiles[monthYear] = [payload];
+        state.data.data[monthYear] = [];
+      } else {
+        if (state.uploader.selectedFiles[monthYear]) {
+          state.uploader.selectedFiles[monthYear].unshift(payload);
+        } else {
+          state.uploader.selectedFiles[monthYear] = [payload];
+        }
+      }
+    },
+    statusSelectFile: (state, { payload }: PayloadAction<IReplaceFile>) => {
+      const { id, date } = payload;
+
+      state.uploader.selectedFiles[date] = state.uploader.selectedFiles[date].map(
+        (item) => (item.id === id ? { ...item, status: true } : item)
+      );
+    },
+    deleteSelectFile: (state, { payload }: PayloadAction<IReplaceFile>) => {
+      const { id, date } = payload;
+
+      const mainData = state.data.data[date];
+      const selectedData = state.uploader.selectedFiles[date];
+
+      if (selectedData)
+        state.uploader.selectedFiles[date] = selectedData.filter(
+          (item) => item.id !== id
+        );
+
+      if (mainData.length < 1 && selectedData.length < 1) {
+        state.data.dates = state.data.dates.filter((d) => d !== date);
+      }
     },
   },
 });
@@ -85,6 +140,8 @@ export const {
   changeLabel,
   deleteImage,
   selectFile,
+  statusSelectFile,
+  deleteSelectFile,
 } = imagesSlice.actions;
 
 export default imagesSlice.reducer;

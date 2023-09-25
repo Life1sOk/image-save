@@ -1,4 +1,4 @@
-import { RefObject, ChangeEvent, useRef } from "react";
+import { RefObject, ChangeEvent, useRef, useId } from "react";
 
 import { useAppDispatch } from "@ui/app/store/hooks";
 import { selectFile } from "@ui/app/store/images.slice";
@@ -10,13 +10,23 @@ import uploadSVG from "../../../../public/upload.svg";
 import Button from "@ui/components/button";
 
 const UploadButton = () => {
+  const uniqueId = useId();
+
   const dispatch = useAppDispatch();
   const fileRef: RefObject<HTMLInputElement> = useRef(null);
 
   const handleOpenFile = () => fileRef.current?.click();
 
   const handleCurrentFile = (event: ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files) dispatch(selectFile({ file: event.target.files[0] }));
+    if (event.target.files && event.target.files[0]) {
+      const prep = {
+        id: uniqueId,
+        file: event.target.files[0],
+        status: false,
+      };
+
+      dispatch(selectFile(prep));
+    }
   };
 
   return (
