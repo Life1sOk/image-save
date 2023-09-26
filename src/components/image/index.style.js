@@ -4,7 +4,10 @@ export const ImageDisplayStyle = styled.div`
   position: relative;
 
   width: fit-content;
-  height: fit-content;
+  height: 213px;
+
+  display: flex;
+  align-items: flex-end;
 `;
 
 export const ImageWrapper = styled.div`
@@ -17,7 +20,7 @@ export const ImageWrapper = styled.div`
 
 export const InfoWrapper = styled.div`
   position: absolute;
-  top: -10px;
+  top: 3px;
   right: 10px;
   z-index: 4;
 

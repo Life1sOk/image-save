@@ -1,3 +1,5 @@
+import axios from "axios";
+
 export async function getData() {
   const res = await fetch("http://localhost:4000/api/images");
   // The return value is *not* serialized
@@ -11,6 +13,16 @@ export async function getData() {
   return res.json();
 }
 
-export async function changeLabelImage() {
-  const res = await fetch("http://localhost:4000/api/images/add-title");
+export async function deleteImageApi(id: number) {
+  const response = await axios.delete(`http://localhost:4000/api/images/delete?id=${id}`);
+
+  return response;
+}
+
+export async function updateImageLabelApi(id: number, title: string) {
+  const response = await axios.post(
+    `http://localhost:4000/api/images/add-title?id=${id}&title=${title}`
+  );
+
+  return response;
 }

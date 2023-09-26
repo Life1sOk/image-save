@@ -6,11 +6,12 @@ interface IButton {
   title: string;
   src: string;
   action?: () => void;
+  disabled?: boolean;
 }
 
-const Button = ({ title, src, action }: IButton) => {
+const Button = ({ title, src, action, disabled = false }: IButton) => {
   return (
-    <ButtonStyle onClick={action}>
+    <ButtonStyle onClick={action} disabled={disabled}>
       <IconWrapper className="icon-wrapper">
         <Image src={src} alt="upload" />
       </IconWrapper>

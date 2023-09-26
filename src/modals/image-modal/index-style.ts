@@ -3,11 +3,12 @@ import styled from "styled-components";
 export const ModalWrapper = styled.div`
   position: absolute;
 
-  top: 0;
+  bottom: 0;
   right: 0;
 
   width: 100%;
   height: 100%;
+  max-height: 200px;
   border-radius: 10px;
   overflow: hidden;
 
@@ -40,10 +41,10 @@ export const FeatureWrapper = styled.div`
   gap: 15px;
 `;
 
-export const ModalUploadStyle = styled(ModalBasic)<{ procent: number }>`
+export const ModalUploadStyle = styled(ModalBasic)<{ $procent: number }>`
   background-color: rgba(238, 238, 238, 0.6);
 
-  width: ${({ procent }) => (procent ? `${procent}%` : "100%")};
+  width: ${({ $procent }) => ($procent ? `${$procent}%` : "100%")};
 `;
 
 export const UploadWrapper = styled.div`

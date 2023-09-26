@@ -2,7 +2,7 @@
 
 import styled from "styled-components";
 
-export const BlurEditorStyle = styled.div`
+export const BlurEditorStyle = styled.div<{ $blur: number }>`
   position: fixed;
   top: 0;
   left: 0;
@@ -14,8 +14,8 @@ export const BlurEditorStyle = styled.div`
   width: 100%;
   height: 100%;
 
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: blur(5px);
+  background-color: ${({ $blur }) => ($blur > 0 ? `rgba(255, 255, 255, 0.8)` : "white")};
+  backdrop-filter: ${({ $blur }) => ($blur > 0 ? `blur(${$blur}px)` : "blur(0px)")};
 
   display: flex;
   align-items: center;

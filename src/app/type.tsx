@@ -1,5 +1,5 @@
 export interface IImage {
-  id: number;
+  id: number | string;
   title: string | null;
   src: string;
   date: string;
@@ -18,11 +18,14 @@ export interface IDeleteImg {
 
 export interface IEditOpen {
   data: IImage;
-  date: string;
+  year: string;
+  type: "upload" | "display";
+  customId?: string;
 }
 
 export interface ISelectedFile {
   id: string;
+  title: string | null;
   file: File;
   status: boolean;
 }

@@ -7,6 +7,8 @@ import { useAppDispatch } from "@ui/app/store/hooks";
 import { statusSelectFile } from "@ui/app/store/images.slice";
 import { editImage, deleteSelectFile } from "@ui/app/store/images.slice";
 
+import { deleteImageApi } from "@ui/api/fetch-actions";
+
 import downloadSVG from "../../../public/download.svg";
 import editSVG from "../../../public/edit.svg";
 import deleteSVG from "../../../public/delete.svg";
@@ -33,12 +35,25 @@ const ImageUpload = ({ data }: IImgUpload) => {
   const { dayMonth } = formateDate();
   const { preview, progress, respData } = useUploading(data.file, data.status);
 
+  const wichInfo = data.title == null ? dayMonth : data.title;
+  console.log(data, "upload");
   // Dispath delete from upload files
-  const handleEdit = () =>
-    dispatch(editImage({ data: respData?.current!, date: respData?.date! }));
+  const handleEdit = () => {
+    if (respData !== null)
+      dispatch(
+        editImage({
+          data: respData.current,
+          customId: data.id,
+          year: respData.date,
+          type: "upload",
+        })
+      );
+  };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     dispatch(deleteSelectFile({ id: data.id, date: respData?.date! }));
+
+    if (respData !== null) await deleteImageApi(Number(respData.current.id));
   };
 
   useEffect(() => {
@@ -62,7 +77,7 @@ const ImageUpload = ({ data }: IImgUpload) => {
           />
         )}
       </ImageWrapper>
-      <InfoWrapper>{dayMonth}</InfoWrapper>
+      <InfoWrapper>{wichInfo}</InfoWrapper>
       <UploadModal data={progress} done={data.status} />
       {data.status && (
         <FeatureModal

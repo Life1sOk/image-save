@@ -8,31 +8,24 @@ import { setImages, fetchDone, closeEditor } from "@ui/app/store/images.slice";
 import xSVG from "../../../public/x.svg";
 
 import Button from "@ui/components/button";
-import BlurModal from "@ui/modals/blur-modal";
+import PageModal from "@ui/modals/page-modal";
 import EditorBlock from "@ui/block/editor-block";
-import ImageUpload from "@ui/components/image/image-upload";
-import ImageDisplay from "@ui/components/image/image-display";
+import EmptyBlock from "@ui/block/empty-block";
+import ImagesBlock from "@ui/block/images-block";
+import SkeletBlock from "@ui/block/skeleton";
 
 import { getData } from "@ui/api/fetch-actions";
 import type { IGetData } from "@ui/app/type";
 
-import {
-  MainStyle,
-  ImagesStyle,
-  ImagesHeader,
-  ImagesMain,
-  DateStyle,
-  CountBallStyle,
-} from "./index.style";
+import { MainStyle } from "./index.style";
 
 const Main = () => {
   const dispatch = useAppDispatch();
 
-  const { data, dates } = useAppSelector((state) => state.images.data);
-  const selected = useAppSelector((state) => state.images.uploader.selectedFiles);
+  const dates = useAppSelector((state) => state.images.data.dates);
   const isFetched = useAppSelector((state) => state.images.isFetched);
-
-  const isModalOpen = useAppSelector((state) => state.images.editor.isOpen);
+  const isEditorOpen = useAppSelector((state) => state.images.editor.isOpen);
+  const isUploaderOpen = useAppSelector((state) => state.images.uploader.isOpen);
 
   useEffect(() => {
     (async () => {
@@ -44,29 +37,18 @@ const Main = () => {
     })();
   }, []);
 
+  console.log(useAppSelector((state) => state.images.editor));
   return (
     <MainStyle>
-      {dates?.map((currentData) => (
-        <ImagesStyle key={currentData}>
-          <ImagesHeader>
-            <DateStyle>{currentData}</DateStyle>
-            <CountBallStyle>
-              {data[currentData]?.length + selected[currentData]?.length}
-            </CountBallStyle>
-          </ImagesHeader>
-          <ImagesMain>
-            {selected[currentData]?.map((data, index) => (
-              <ImageUpload key={index} data={data} />
-            ))}
-            {data[currentData]?.map((data) => (
-              <ImageDisplay key={data.id} data={data} currentData={currentData} />
-            ))}
-          </ImagesMain>
-        </ImagesStyle>
-      ))}
-      <BlurModal
+      {!isFetched ? (
+        <SkeletBlock />
+      ) : (
+        dates?.map((currentData) => <ImagesBlock key={currentData} date={currentData} />)
+      )}
+      <PageModal
         block={<EditorBlock />}
-        isOpen={isModalOpen}
+        isOpen={isEditorOpen}
+        blur={5}
         closeButton={
           <Button
             title="Close editor"
@@ -75,6 +57,7 @@ const Main = () => {
           />
         }
       />
+      <PageModal block={<EmptyBlock />} isOpen={isUploaderOpen} />
     </MainStyle>
   );
 };

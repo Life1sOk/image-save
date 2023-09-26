@@ -19,9 +19,12 @@ interface IImagesState {
   editor: {
     isOpen: boolean;
     date: string | null;
+    customId: string | null;
     current: IImage | null;
+    type: "upload" | "display";
   };
   uploader: {
+    isOpen: boolean;
     selectedFiles: { [key: string]: ISelectedFile[] };
   };
 }
@@ -37,8 +40,11 @@ const initialState: IImagesState = {
     isOpen: false,
     date: null,
     current: null,
+    customId: null,
+    type: "display",
   },
   uploader: {
+    isOpen: false,
     selectedFiles: {},
   },
 };
@@ -49,17 +55,29 @@ export const imagesSlice = createSlice({
   reducers: {
     setImages: (state, { payload }: PayloadAction<IGetData>) => {
       state.data = payload;
+
+      if (payload.totalCount < 1) state.uploader.isOpen = true;
     },
     fetchDone: (state, { payload }: PayloadAction<boolean>) => {
       state.isFetched = payload;
     },
     changeLabel: (state, { payload }: PayloadAction<string>) => {
       const currentId = state.editor.current?.id!;
+      const customId = state.editor?.customId!;
       const currentDate = state.editor.date!;
+      const type = state.editor.type;
 
-      state.data.data[currentDate] = state.data.data[currentDate].map((img) =>
-        img.id === currentId ? { ...img, title: payload } : img
-      );
+      if (type === "display") {
+        state.data.data[currentDate] = state.data.data[currentDate].map((img) =>
+          img.id === currentId ? { ...img, title: payload } : img
+        );
+      }
+
+      if (type === "upload") {
+        state.uploader.selectedFiles[currentDate] = state.uploader.selectedFiles[
+          currentDate
+        ].map((img) => (img.id === customId ? { ...img, title: payload } : img));
+      }
 
       state.editor.isOpen = false;
     },
@@ -74,14 +92,24 @@ export const imagesSlice = createSlice({
       if (mainData.length < 1 && selectedData.length < 1) {
         state.data.dates = state.data.dates.filter((d) => d !== date);
       }
+
+      if (state.data.totalCount === 1) {
+        state.data.totalCount--;
+        state.uploader.isOpen = true;
+      } else {
+        state.data.totalCount--;
+      }
     },
     // Editor
     editImage: (state, { payload }: PayloadAction<IEditOpen>) => {
-      const { date, data } = payload;
+      const { year, data, type, customId } = payload;
 
       state.editor.current = data;
-      state.editor.date = date;
+      state.editor.date = year;
       state.editor.isOpen = true;
+
+      state.editor.type = type;
+      if (customId) state.editor.customId = customId;
     },
     closeEditor: (state) => {
       state.editor.isOpen = false;
@@ -106,6 +134,8 @@ export const imagesSlice = createSlice({
           state.uploader.selectedFiles[monthYear] = [payload];
         }
       }
+
+      state.uploader.isOpen = false;
     },
     statusSelectFile: (state, { payload }: PayloadAction<IReplaceFile>) => {
       const { id, date } = payload;
@@ -113,6 +143,8 @@ export const imagesSlice = createSlice({
       state.uploader.selectedFiles[date] = state.uploader.selectedFiles[date].map(
         (item) => (item.id === id ? { ...item, status: true } : item)
       );
+
+      state.data.totalCount++;
     },
     deleteSelectFile: (state, { payload }: PayloadAction<IReplaceFile>) => {
       const { id, date } = payload;
@@ -127,6 +159,13 @@ export const imagesSlice = createSlice({
 
       if (mainData.length < 1 && selectedData.length < 1) {
         state.data.dates = state.data.dates.filter((d) => d !== date);
+      }
+
+      if (state.data.totalCount === 1) {
+        state.data.totalCount--;
+        state.uploader.isOpen = true;
+      } else {
+        state.data.totalCount--;
       }
     },
   },

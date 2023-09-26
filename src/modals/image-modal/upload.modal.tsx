@@ -13,7 +13,7 @@ const UploadModal = ({
 
   return (
     <ModalWrapper>
-      <ModalUploadStyle procent={data?.procent!} />
+      <ModalUploadStyle $procent={data?.procent!} />
       <UploadWrapper>
         <h4>Uploading</h4>
         <span>{data.kb}</span>

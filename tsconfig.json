@@ -29,7 +29,7 @@
     ".next/types/**/*.ts",
     "src/components/logo/index.style.js",
     "src/app/page.style.js",
-    "src/modals/blur-modal/index.style.js",
+    "src/modals/page-modal/index.style.ts",
     "src/modals/unpload-modal/index.style.js"
   ],
   "exclude": ["node_modules"]

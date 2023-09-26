@@ -2,6 +2,8 @@
 
 import { useRef } from "react";
 
+import { updateImageLabelApi } from "@ui/api/fetch-actions";
+
 import { useAppSelector, useAppDispatch } from "@ui/app/store/hooks";
 import { changeLabel } from "@ui/app/store/images.slice";
 
@@ -19,8 +21,13 @@ const EditorBlock = () => {
 
   const editImage = useAppSelector((state) => state.images.editor.current)!;
 
-  const handleSaveChanges = () => {
-    if (ref.current) dispatch(changeLabel(ref.current.value()));
+  const handleSaveChanges = async () => {
+    if (ref.current) {
+      dispatch(changeLabel(ref.current.value()));
+
+      if (editImage.id)
+        await updateImageLabelApi(Number(editImage.id), ref.current.value());
+    }
   };
 
   return (

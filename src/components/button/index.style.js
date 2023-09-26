@@ -1,9 +1,10 @@
 import styled from "styled-components";
 
-export const ButtonStyle = styled.div`
+export const ButtonStyle = styled.button`
   width: fit-content;
   height: fit-content;
   padding: 15px 20px 15px 15px;
+  border: none;
   border-radius: 10px;
 
   background-color: rgba(238, 238, 238, 1);
@@ -16,7 +17,11 @@ export const ButtonStyle = styled.div`
 
   &:hover {
     transition: all 0.1s;
-    background-color: rgba(218, 218, 218, 1);
+    background-color: rgba(169, 229, 187, 1);
+  }
+
+  &:disabled {
+    background-color: rgba(238, 238, 238, 1);
   }
 `;
 

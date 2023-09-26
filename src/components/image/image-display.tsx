@@ -1,6 +1,10 @@
 import Image from "next/image";
+
+import { useState } from "react";
 import { useAppDispatch } from "@ui/app/store/hooks";
 import { editImage, deleteImage } from "@ui/app/store/images.slice";
+
+import { deleteImageApi } from "@ui/api/fetch-actions";
 
 import downloadSVG from "../../../public/download.svg";
 import editSVG from "../../../public/edit.svg";
@@ -14,13 +18,15 @@ import { ImageDisplayStyle, ImageWrapper, InfoWrapper } from "./index.style";
 
 interface IImgData {
   data: IImage;
+  currentDate?: string;
   isLabel?: boolean;
-  currentData: string;
 }
 
 const ImageDisplay = (props: IImgData) => {
-  const { data, isLabel = true, currentData } = props;
+  const { data, currentDate, isLabel = true } = props;
   const { src, title, date } = data;
+
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const dispatch = useAppDispatch();
 
@@ -30,10 +36,21 @@ const ImageDisplay = (props: IImgData) => {
   // Image url
   const imageUrl = `http://localhost:4000/${src}`;
 
+  const handleEdit = () => {
+    if (currentDate) dispatch(editImage({ data, year: currentDate, type: "display" }));
+  };
+
+  const handleDelete = async () => {
+    dispatch(deleteImage({ id: Number(data.id), date: currentDate! }));
+
+    if (data.id !== null) await deleteImageApi(Number(data.id));
+  };
+
   return (
     <ImageDisplayStyle>
       <ImageWrapper>
         <Image
+          onLoadingComplete={() => setIsLoaded(true)}
           width={0}
           height={0}
           style={{ width: "100%", height: "200px" }}
@@ -43,7 +60,7 @@ const ImageDisplay = (props: IImgData) => {
           priority
         />
       </ImageWrapper>
-      {isLabel && <InfoWrapper>{wichInfo}</InfoWrapper>}
+      {isLoaded && isLabel && <InfoWrapper>{wichInfo}</InfoWrapper>}
       <FeatureModal
         features={[
           <FeatureButton key={"Download"} title="Download" icon={downloadSVG} />,
@@ -51,13 +68,13 @@ const ImageDisplay = (props: IImgData) => {
             key={"Edit label"}
             title="Edit label"
             icon={editSVG}
-            action={() => dispatch(editImage({ data, date }))}
+            action={handleEdit}
           />,
           <FeatureButton
             key={"Delete"}
             title="Delete"
             icon={deleteSVG}
-            action={() => dispatch(deleteImage({ id: data.id, date: currentData }))}
+            action={handleDelete}
           />,
         ]}
       />

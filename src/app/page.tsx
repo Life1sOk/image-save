@@ -2,13 +2,14 @@ import "../styles/global.css";
 
 import Header from "@ui/sections/header";
 import Main from "@ui/sections/main";
+import DropWrapper from "@ui/sections/drop";
 
 const Home = async () => {
   return (
-    <div>
+    <DropWrapper>
       <Header />
       <Main />
-    </div>
+    </DropWrapper>
   );
 };
 
