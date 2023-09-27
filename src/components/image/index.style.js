@@ -2,6 +2,8 @@ import styled from "styled-components";
 
 export const ImageDisplayStyle = styled.div`
   position: relative;
+  pointer-events: all;
+  z-index: 52;
 
   width: fit-content;
   height: 213px;

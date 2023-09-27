@@ -3,6 +3,7 @@ import styled from "styled-components";
 export const EditorStyle = styled.div`
   width: fit-content;
   height: fit-content;
+  pointer-events: all;
 
   display: flex;
   flex-direction: column;

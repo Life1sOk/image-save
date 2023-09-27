@@ -38,6 +38,7 @@ const UploadButton = () => {
         style={{ display: "none" }}
         type="file"
         ref={fileRef}
+        multiple
         onChange={(e) => handleCurrentFile(e)}
       />
       <Button

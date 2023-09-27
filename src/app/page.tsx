@@ -6,10 +6,11 @@ import DropWrapper from "@ui/sections/drop";
 
 const Home = async () => {
   return (
-    <DropWrapper>
+    <div>
       <Header />
       <Main />
-    </DropWrapper>
+      <DropWrapper />
+    </div>
   );
 };
 

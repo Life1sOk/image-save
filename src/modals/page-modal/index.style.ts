@@ -8,8 +8,9 @@ export const BlurEditorStyle = styled.div<{ $blur: number }>`
   left: 0;
   right: 0;
   bottom: 0;
+  pointer-events: none;
 
-  z-index: 22;
+  z-index: 62;
 
   width: 100%;
   height: 100%;
@@ -26,6 +27,7 @@ export const CloseButton = styled.div`
   position: absolute;
   top: 50px;
   right: 50px;
+  pointer-events: all;
 
   & .icon-wrapper {
     width: 12px;

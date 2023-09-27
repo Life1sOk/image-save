@@ -1,27 +1,65 @@
 "use client";
 
-import { DragEvent, useState } from "react";
+import { DragEvent, useState, useId } from "react";
+
+import { useAppDispatch } from "@ui/app/store/hooks";
+import { selectFile } from "@ui/app/store/images.slice";
+
+import PageModal from "@ui/modals/page-modal";
+import Uploading from "@ui/components/uloading";
 
 import { DropWrapperStyle, InputStyle } from "./index.style";
+// { children }: { children: React.ReactNode }
+const DropWrapper = () => {
+  const uniqueId = useId();
+  const dispatch = useAppDispatch();
 
-const DropWrapper = ({ children }: { children: React.ReactNode }) => {
   const [isShowen, setIsShowen] = useState(false);
 
   const onDragOver = (event: React.SyntheticEvent) => {
     event.preventDefault();
-
-    console.log("over");
   };
 
-  const onDropHandler = (e: DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    console.log("droped", e.dataTransfer.files);
+  const onDropHandler = (event: DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+
+    console.log(Object.values(event.dataTransfer.files));
+
+    if (event.dataTransfer.files.length > 0) {
+      Object.values(event.dataTransfer.files).forEach((item) => {
+        const prep = {
+          id: uniqueId,
+          title: null,
+          file: item,
+          status: false,
+        };
+
+        dispatch(selectFile(prep));
+      });
+    }
+
+    if (isShowen) setIsShowen(false);
+  };
+
+  const onDragEnter = () => {
+    if (!isShowen) setIsShowen(true);
+  };
+
+  const onDragLeave = () => {
+    if (isShowen) setIsShowen(false);
   };
 
   return (
-    <DropWrapperStyle onDragOver={onDragOver} onDrop={(e) => onDropHandler(e)}>
-      <InputStyle accept="image/*" />
-      {children}
+    <DropWrapperStyle
+      onDragStart={() => console.log("started")}
+      onDragOver={onDragOver}
+      onDrop={(e) => onDropHandler(e)}
+      onDragEnter={onDragEnter}
+      onDragLeave={onDragLeave}
+    >
+      {isShowen && <InputStyle accept="image/*" multiple />}
+      <PageModal block={<Uploading />} blur={5} isOpen={isShowen} />
+      {/* {children} */}
     </DropWrapperStyle>
   );
 };

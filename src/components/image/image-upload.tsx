@@ -36,7 +36,7 @@ const ImageUpload = ({ data }: IImgUpload) => {
   const { preview, progress, respData } = useUploading(data.file, data.status);
 
   const wichInfo = data.title == null ? dayMonth : data.title;
-  console.log(data, "upload");
+
   // Dispath delete from upload files
   const handleEdit = () => {
     if (respData !== null)
