@@ -1,5 +1,5 @@
-Архитектура: Слои - components > block > modals > sections > pages;
-Стек: RTK, axios, typescript, styled components, next.js;
+- Архитектура: Слои - components > block > modals > sections > pages;
+- Стек: RTK, axios, typescript, styled components, next.js;
 
 P.S.
 
