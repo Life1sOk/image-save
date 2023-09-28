@@ -14,13 +14,15 @@ import EmptyBlock from "@ui/block/empty-block";
 import ImagesBlock from "@ui/block/images-block";
 import SkeletBlock from "@ui/block/skeleton";
 
-import { getData } from "@ui/api/fetch-actions";
+import { useFetchAction } from "@ui/api/fetch-actions";
 import type { IGetData } from "@ui/app/type";
 
 import { MainStyle } from "./index.style";
 
 const Main = () => {
   const dispatch = useAppDispatch();
+
+  const { getData } = useFetchAction();
 
   const dates = useAppSelector((state) => state.images.data.dates);
   const isFetched = useAppSelector((state) => state.images.isFetched);
@@ -37,7 +39,6 @@ const Main = () => {
     })();
   }, []);
 
-  console.log(useAppSelector((state) => state.images.editor));
   return (
     <MainStyle>
       {!isFetched ? (

@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAppDispatch } from "@ui/app/store/hooks";
 import { editImage, deleteImage } from "@ui/app/store/images.slice";
 
-import { deleteImageApi } from "@ui/api/fetch-actions";
+import { useFetchAction } from "@ui/api/fetch-actions";
 
 import downloadSVG from "../../../public/download.svg";
 import editSVG from "../../../public/edit.svg";
@@ -26,9 +26,10 @@ const ImageDisplay = (props: IImgData) => {
   const { data, currentDate, isLabel = true } = props;
   const { src, title, date } = data;
 
+  const dispatch = useAppDispatch();
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const dispatch = useAppDispatch();
+  const { deleteImageApi } = useFetchAction();
 
   // isTitle exist
   const wichInfo = title == null ? date : title;

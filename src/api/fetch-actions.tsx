@@ -1,28 +1,54 @@
 import axios from "axios";
 
-export async function getData() {
-  const res = await fetch("http://localhost:4000/api/images");
-  // The return value is *not* serialized
-  // You can return Date, Map, Set, etc.
+import { useAppDispatch } from "@ui/app/store/hooks";
+import { fetchError } from "@ui/app/store/images.slice";
 
-  if (!res.ok) {
-    // This will activate the closest `error.js` Error Boundary
-    throw new Error("Failed to fetch data");
+export const useFetchAction = () => {
+  const disatch = useAppDispatch();
+
+  async function getData() {
+    const res = await fetch("http://localhost:4000/api/images");
+    // The return value is *not* serialized
+    // You can return Date, Map, Set, etc.
+
+    if (!res.ok) {
+      disatch(fetchError(true));
+    }
+
+    return res.json();
   }
 
-  return res.json();
-}
+  async function deleteImageApi(id: number) {
+    try {
+      const response = await axios.delete(
+        `http://localhost:4000/api/images/delete?id=${id}`
+      );
 
-export async function deleteImageApi(id: number) {
-  const response = await axios.delete(`http://localhost:4000/api/images/delete?id=${id}`);
+      return response;
+    } catch (err) {
+      if (err) {
+        disatch(fetchError(true));
+      }
+    }
+  }
 
-  return response;
-}
+  async function updateImageLabelApi(id: number, title: string) {
+    try {
+      const response = await axios.post(
+        `http://localhost:4000/api/images/add-title?id=${id}&title=${title}`
+      );
 
-export async function updateImageLabelApi(id: number, title: string) {
-  const response = await axios.post(
-    `http://localhost:4000/api/images/add-title?id=${id}&title=${title}`
-  );
+      return response;
+    } catch (err) {
+      if (err) {
+        disatch(fetchError(true));
+      }
+    }
+  }
 
-  return response;
-}
+  return {
+    getData,
+    deleteImageApi,
+    updateImageLabelApi,
+  };
+};

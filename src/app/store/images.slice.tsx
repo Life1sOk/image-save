@@ -15,6 +15,7 @@ import type {
 
 interface IImagesState {
   isFetched: boolean;
+  isError: boolean;
   data: IGetData;
   editor: {
     isOpen: boolean;
@@ -31,6 +32,7 @@ interface IImagesState {
 
 const initialState: IImagesState = {
   isFetched: false,
+  isError: false,
   data: {
     totalCount: 0,
     dates: [],
@@ -60,6 +62,9 @@ export const imagesSlice = createSlice({
     },
     fetchDone: (state, { payload }: PayloadAction<boolean>) => {
       state.isFetched = payload;
+    },
+    fetchError: (state, { payload }: PayloadAction<boolean>) => {
+      state.isError = payload;
     },
     changeLabel: (state, { payload }: PayloadAction<string>) => {
       const currentId = state.editor.current?.id!;
@@ -174,6 +179,7 @@ export const imagesSlice = createSlice({
 export const {
   setImages,
   fetchDone,
+  fetchError,
   editImage,
   closeEditor,
   changeLabel,

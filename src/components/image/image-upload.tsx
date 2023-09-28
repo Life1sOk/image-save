@@ -7,7 +7,7 @@ import { useAppDispatch } from "@ui/app/store/hooks";
 import { statusSelectFile } from "@ui/app/store/images.slice";
 import { editImage, deleteSelectFile } from "@ui/app/store/images.slice";
 
-import { deleteImageApi } from "@ui/api/fetch-actions";
+import { useFetchAction } from "@ui/api/fetch-actions";
 
 import downloadSVG from "../../../public/download.svg";
 import editSVG from "../../../public/edit.svg";
@@ -32,6 +32,7 @@ interface IImgUpload {
 const ImageUpload = ({ data }: IImgUpload) => {
   const dispatch = useAppDispatch();
 
+  const { deleteImageApi } = useFetchAction();
   const { dayMonth } = formateDate();
   const { preview, progress, respData } = useUploading(data.file, data.status);
 

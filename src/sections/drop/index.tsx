@@ -9,7 +9,7 @@ import PageModal from "@ui/modals/page-modal";
 import Uploading from "@ui/components/uloading";
 
 import { DropWrapperStyle, InputStyle } from "./index.style";
-// { children }: { children: React.ReactNode }
+
 const DropWrapper = () => {
   const uniqueId = useId();
   const dispatch = useAppDispatch();
@@ -22,8 +22,6 @@ const DropWrapper = () => {
 
   const onDropHandler = (event: DragEvent<HTMLDivElement>) => {
     event.preventDefault();
-
-    console.log(Object.values(event.dataTransfer.files));
 
     if (event.dataTransfer.files.length > 0) {
       Object.values(event.dataTransfer.files).forEach((item) => {
@@ -51,6 +49,7 @@ const DropWrapper = () => {
 
   return (
     <DropWrapperStyle
+      $isShowen={isShowen}
       onDragStart={() => console.log("started")}
       onDragOver={onDragOver}
       onDrop={(e) => onDropHandler(e)}
@@ -59,7 +58,6 @@ const DropWrapper = () => {
     >
       {isShowen && <InputStyle accept="image/*" multiple />}
       <PageModal block={<Uploading />} blur={5} isOpen={isShowen} />
-      {/* {children} */}
     </DropWrapperStyle>
   );
 };

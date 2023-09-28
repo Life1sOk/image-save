@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 
-import { updateImageLabelApi } from "@ui/api/fetch-actions";
+import { useFetchAction } from "@ui/api/fetch-actions";
 
 import { useAppSelector, useAppDispatch } from "@ui/app/store/hooks";
 import { changeLabel } from "@ui/app/store/images.slice";
@@ -18,6 +18,8 @@ import { EditorStyle, ImageDisplayBlock, Title } from "./index.style";
 const EditorBlock = () => {
   const dispatch = useAppDispatch();
   const ref = useRef<any>(null);
+
+  const { updateImageLabelApi } = useFetchAction();
 
   const editImage = useAppSelector((state) => state.images.editor.current)!;
 

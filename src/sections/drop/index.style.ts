@@ -1,6 +1,6 @@
 import styled from "styled-components";
 
-export const DropWrapperStyle = styled.div`
+export const DropWrapperStyle = styled.div<{ $isShowen: boolean }>`
   position: fixed;
 
   top: 0;
@@ -11,7 +11,7 @@ export const DropWrapperStyle = styled.div`
   width: 100vw;
   height: 100vh;
 
-  z-index: 1;
+  z-index: ${({ $isShowen }) => ($isShowen ? "333" : "1")};
 `;
 
 export const InputStyle = styled.input`
