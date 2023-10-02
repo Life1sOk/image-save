@@ -1,5 +1,3 @@
-import axios from "axios";
-
 import Image from "next/image";
 import { useEffect } from "react";
 
@@ -34,7 +32,11 @@ const ImageUpload = ({ data }: IImgUpload) => {
 
   const { deleteImageApi } = useFetchAction();
   const { dayMonth } = formateDate();
-  const { preview, progress, respData } = useUploading(data.file, data.status);
+  const { preview, progress, respData } = useUploading(
+    data.file,
+    data.status,
+    String(data.id)
+  );
 
   const wichInfo = data.title == null ? dayMonth : data.title;
 
@@ -44,7 +46,7 @@ const ImageUpload = ({ data }: IImgUpload) => {
       dispatch(
         editImage({
           data: respData.current,
-          customId: data.id,
+          id: Number(data.id),
           year: respData.date,
           type: "upload",
         })
@@ -52,9 +54,10 @@ const ImageUpload = ({ data }: IImgUpload) => {
   };
 
   const handleDelete = async () => {
-    dispatch(deleteSelectFile({ id: data.id, date: respData?.date! }));
-
-    if (respData !== null) await deleteImageApi(Number(respData.current.id));
+    if (respData !== null) {
+      dispatch(deleteSelectFile({ id: Number(data.id), date: respData?.date! }));
+      await deleteImageApi(Number(data.id));
+    }
   };
 
   useEffect(() => {

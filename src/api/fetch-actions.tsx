@@ -8,12 +8,8 @@ export const useFetchAction = () => {
 
   async function getData() {
     const res = await fetch("http://localhost:4000/api/images");
-    // The return value is *not* serialized
-    // You can return Date, Map, Set, etc.
 
-    if (!res.ok) {
-      disatch(fetchError(true));
-    }
+    if (!res.ok) disatch(fetchError(true));
 
     return res.json();
   }
@@ -26,9 +22,7 @@ export const useFetchAction = () => {
 
       return response;
     } catch (err) {
-      if (err) {
-        disatch(fetchError(true));
-      }
+      if (err) disatch(fetchError(true));
     }
   }
 
@@ -40,9 +34,7 @@ export const useFetchAction = () => {
 
       return response;
     } catch (err) {
-      if (err) {
-        disatch(fetchError(true));
-      }
+      if (err) disatch(fetchError(true));
     }
   }
 

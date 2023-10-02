@@ -20,22 +20,28 @@ export interface IEditOpen {
   data: IImage;
   year: string;
   type: "upload" | "display";
-  customId?: string;
+  id?: number;
 }
 
 export interface ISelectedFile {
-  id: string;
+  id: string | number;
   title: string | null;
   file: File;
   status: boolean;
 }
 
 export interface IReplaceFile {
-  id: string;
+  id: number | string;
   date: string;
 }
 
 export interface IResponseAdd {
   date: string;
   current: IImage;
+}
+
+export interface IUpdateFileId {
+  oldId: string;
+  newId: number;
+  date: string;
 }

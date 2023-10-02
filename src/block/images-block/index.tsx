@@ -28,7 +28,7 @@ const ImagesBlock = ({ date }: { date: string }) => {
     }
   };
 
-  console.log(images);
+  console.log(selected[date]);
 
   return (
     <ImagesStyle>

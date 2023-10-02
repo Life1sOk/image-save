@@ -13,14 +13,12 @@ const StatusModal = () => {
   const isError = useAppSelector((state) => state.images.isError);
 
   useEffect(() => {
-    if (isError) {
-      const timer = setTimeout(() => {
-        dispatch(fetchError(false));
-      }, 3000);
+    const timer = setTimeout(() => {
+      dispatch(fetchError(false));
+    }, 3000);
 
-      return clearTimeout(timer);
-    }
-  }, [isError]);
+    return clearTimeout(timer);
+  }, []);
 
   return (
     <StatusModalStyle $isError={isError}>

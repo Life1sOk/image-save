@@ -3,9 +3,14 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+import { useAppDispatch } from "@ui/app/store/hooks";
+import { updateIdFile } from "@ui/app/store/images.slice";
+
 import type { IResponseAdd } from "@ui/app/type";
 
-export const useUploading = (data: File, status: boolean) => {
+export const useUploading = (data: File, status: boolean, dataId: string) => {
+  const dispatch = useAppDispatch();
+
   const [preview, setPreview] = useState<string | null>(null);
   const [respData, setRespData] = useState<IResponseAdd | null>(null);
   const [progress, setProgress] = useState({ kb: "", procent: 0 });
@@ -29,6 +34,14 @@ export const useUploading = (data: File, status: boolean) => {
     });
 
     setRespData(response.data);
+
+    dispatch(
+      updateIdFile({
+        oldId: dataId,
+        newId: response.data?.current.id!,
+        date: response.data?.date!,
+      })
+    );
   };
 
   useEffect(() => {

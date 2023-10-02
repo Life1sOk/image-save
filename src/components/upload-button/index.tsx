@@ -5,7 +5,7 @@ import { selectFile } from "@ui/app/store/images.slice";
 
 import { UploadStyle } from "./index.style";
 
-import uploadSVG from "../../../../public/upload.svg";
+import uploadSVG from "../../../public/upload.svg";
 
 import Button from "@ui/components/button";
 
@@ -21,14 +21,16 @@ const UploadButton = () => {
 
   const handleCurrentFile = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
-      const prep = {
-        id: uniqueId,
-        title: null,
-        file: event.target.files[0],
-        status: false,
-      };
+      Object.values(event.target.files).forEach((item, index) => {
+        const prep = {
+          id: uniqueId + index,
+          title: null,
+          file: item,
+          status: false,
+        };
 
-      dispatch(selectFile(prep));
+        dispatch(selectFile(prep));
+      });
     }
   };
 

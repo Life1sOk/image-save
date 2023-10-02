@@ -11,6 +11,7 @@ import type {
   IEditOpen,
   IReplaceFile,
   ISelectedFile,
+  IUpdateFileId,
 } from "@ui/app/type";
 
 interface IImagesState {
@@ -20,7 +21,7 @@ interface IImagesState {
   editor: {
     isOpen: boolean;
     date: string | null;
-    customId: string | null;
+    customId: number | null;
     current: IImage | null;
     type: "upload" | "display";
   };
@@ -107,14 +108,14 @@ export const imagesSlice = createSlice({
     },
     // Editor
     editImage: (state, { payload }: PayloadAction<IEditOpen>) => {
-      const { year, data, type, customId } = payload;
+      const { year, data, type, id } = payload;
 
       state.editor.current = data;
       state.editor.date = year;
       state.editor.isOpen = true;
 
       state.editor.type = type;
-      if (customId) state.editor.customId = customId;
+      if (id) state.editor.customId = id;
     },
     closeEditor: (state) => {
       state.editor.isOpen = false;
@@ -142,6 +143,13 @@ export const imagesSlice = createSlice({
 
       state.uploader.isOpen = false;
     },
+    updateIdFile: (state, { payload }: PayloadAction<IUpdateFileId>) => {
+      const { oldId, newId, date } = payload;
+
+      state.uploader.selectedFiles[date] = state.uploader.selectedFiles[date].map(
+        (item) => (item.id === oldId ? { ...item, id: newId } : item)
+      );
+    },
     statusSelectFile: (state, { payload }: PayloadAction<IReplaceFile>) => {
       const { id, date } = payload;
 
@@ -162,7 +170,7 @@ export const imagesSlice = createSlice({
           (item) => item.id !== id
         );
 
-      if (mainData.length < 1 && selectedData.length < 1) {
+      if (mainData?.length < 1 && selectedData?.length < 1) {
         state.data.dates = state.data.dates.filter((d) => d !== date);
       }
 
@@ -181,6 +189,7 @@ export const {
   fetchDone,
   fetchError,
   editImage,
+  updateIdFile,
   closeEditor,
   changeLabel,
   deleteImage,

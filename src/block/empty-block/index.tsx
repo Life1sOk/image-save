@@ -1,7 +1,7 @@
 "use client";
 
 import Logo from "@ui/components/logo";
-import UploadButton from "@ui/sections/header/upload";
+import UploadButton from "@ui/components/upload-button";
 
 import { EmptyBlockStyle, Description } from "./index.style";
 

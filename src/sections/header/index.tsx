@@ -3,12 +3,10 @@
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 
-import { useMemo } from "react";
-
 import { useAppSelector } from "@ui/app/store/hooks";
 
 import Logo from "@ui/components/logo";
-import UploadButton from "./upload";
+import UploadButton from "../../components/upload-button";
 
 import { HeaderStyle, LogoWrapper, CountAllStyle } from "./index.style";
 
